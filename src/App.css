@@ -14,3 +14,35 @@
   border-radius: 20px;       /* округлось бегунка */
   border: 3px solid whitesmoke;  /* отступ вокруг бегунка */
 }
+@keyframes appear {
+  from{
+    opacity: 0;
+    scale: 0.5;
+  }
+  to{
+    opacity: 1;
+    scale: 1;
+  }
+}
+.exitLogo{
+  stroke: none;
+  stroke-width: 0;
+  stroke-dasharray: none;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-miterlimit: 10;
+  fill: none;
+  fill-rule: nonzero;
+  opacity: 1;
+}
+.exitLogo path{
+  stroke: none;
+  stroke-width: 1;
+  stroke-dasharray: none;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-miterlimit: 10;
+  fill: rgb(0,0,0);
+  fill-rule: nonzero;
+  opacity: 1;
+}

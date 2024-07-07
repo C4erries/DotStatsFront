@@ -14,7 +14,7 @@ const SortedTable = (props) => {
                         {
                             props.tbody.map((trVal, trId) =>
                                     <tr key={trId}>
-                                        {trVal.map((tdVal, tdId) => <td key={tdId}>{tdVal}</td>)}
+                                        {trVal.map((tdVal, tdId) => <td className="anim" key={tdId}>{tdVal}</td>)}
                                     </tr>
                             )
                         }
