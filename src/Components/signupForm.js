@@ -4,24 +4,16 @@ import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 
-
-export function LoginForm() {
+export function SignupForm() {
     const [passwordShown, setPasswordShown] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
-    const loginHandler = () => {
+    const togglePasswordVisibility = () => setPasswordShown((cur) => !cur);
+    const signUpHandler = () => {
         axios
-            .post("http://localhost:8080/sessions", {"email": email, "password": password})
+            .post("http://localhost:8080/users", {"email": email, "password": password})
             .then((response) => {
-                if(response.status === 200){
-                    localStorage.setItem("isAuth", true)
-                    localStorage.setItem("username", "unknownUN")
-                    window.location.href = "/"
-                }
-                else{
-
-                }
+                console.log(response.data);
             })
             .catch((error) => {
                 console.warn(error);
@@ -31,12 +23,34 @@ export function LoginForm() {
         <section className="grid text-center h-screen items-center p-8">
             <div>
                 <Typography variant="h3" color="blue-gray" className="mb-2">
-                    Sign In
+                    Sign Up
                 </Typography>
                 <Typography className="mb-16 text-gray-600 font-normal text-[18px]">
-                    Enter your email and password to sign in
+                    Hi
                 </Typography>
                 <form action="#" className="mx-auto max-w-[24rem] text-left">
+                    <div className="mb-6">
+                        <label htmlFor="email">
+                            <Typography
+                                variant="small"
+                                className="mb-2 block font-medium text-gray-900"
+                            >
+                                Your NickName
+                            </Typography>
+                        </label>
+                        <Input
+                            id="nickname"
+                            color="gray"
+                            size="lg"
+                            type="text"
+                            name="nickname"
+                            placeholder="Крутойчел228"
+                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                            labelProps={{
+                                className: "hidden",
+                            }}
+                        />
+                    </div>
                     <div className="mb-6">
                         <label htmlFor="email">
                             <Typography
@@ -53,8 +67,8 @@ export function LoginForm() {
                             type="email"
                             name="email"
                             placeholder="name@mail.com"
-                            onChange={e => {setEmail(e.target.value)}}
                             className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                            onChange={e => setEmail(e.target.value)}
                             labelProps={{
                                 className: "hidden",
                             }}
@@ -66,7 +80,7 @@ export function LoginForm() {
                                 variant="small"
                                 className="mb-2 block font-medium text-gray-900"
                             >
-                                Password
+                                Your Password
                             </Typography>
                         </label>
                         <Input
@@ -79,7 +93,7 @@ export function LoginForm() {
                             className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
                             type={passwordShown ? "text" : "password"}
                             icon={
-                                <i onClick={togglePasswordVisiblity}>
+                                <i onClick={togglePasswordVisibility}>
                                     {passwordShown ? (
                                         <EyeIcon className="h-5 w-5" />
                                     ) : (
@@ -89,8 +103,8 @@ export function LoginForm() {
                             }
                         />
                     </div>
-                    <Button onClick={loginHandler} color="gray" size="lg" className="mt-6" fullWidth>
-                        sign in
+                    <Button onClick={signUpHandler} color="gray" size="lg" className="mt-6" fullWidth>
+                        sign up
                     </Button>
                     <div className="!mt-4 flex justify-end">
                         <Typography
@@ -132,4 +146,4 @@ export function LoginForm() {
     );
 }
 
-export default LoginForm;
+export default SignupForm;

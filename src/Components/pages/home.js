@@ -7,7 +7,6 @@ export function Home(){
         <div>
             <ModalDefault/>
             <p className="text-violet-500">HI</p>
-            <Table/>
         </div>
     )
 }

@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect} from "react";
+import axios from 'axios';
 import {
     Button,
     Dialog,
@@ -6,11 +7,21 @@ import {
     DialogBody,
     DialogFooter,
 } from "@material-tailwind/react";
-
+const instance = axios.create()
+const config = {
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Headers": "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With",
+        "Access-Control-Allow-Methods": "POST, OPTIONS, GET, PUT",
+    },
+    mode: 'cors'
+};
 export function ModalDefault() {
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(!open);
-
+    const handleOpen = () => {
+        setOpen(!open);
+    }
     return (
         <>
             <Button onClick={handleOpen} variant="gradient">
