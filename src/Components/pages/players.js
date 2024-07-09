@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import SortedTable from "../sortedTable/sortedTable";
+import axios from "axios";
 
 const edit = <div className="p-4 border-b border-blue-gray-50">
     <button
@@ -62,7 +63,10 @@ const filter = (searchText, playersList) => {
         return playersList;
     return playersList.filter(value => value.firstName.toLowerCase().includes(searchText.toLowerCase()))
 }
+const amountStep = 10;
 const Players = () => {
+
+    const [amount, setAmount] = useState(amountStep);
     const [playersList, setPlayersList] = useState([])
     const [filteredList, setFilteredList] = useState([])
     const [searchText, setSearchText] = useState('')
@@ -74,13 +78,22 @@ const Players = () => {
                 temp.push(createCard(value.firstName, value.secondName, value.matches, value.wins, value.isOnline))
             })
             setFilteredList(temp)
-        }, 300)
+        }, 1)
         return ()=>clearTimeout(Debounce)
     }, [searchText, playersList])
-    const func = (data) =>{
+    const middleware = (data) =>{
         const temp = []
-        setPlayersList(data)
+        setPlayersList(playersList.concat(data))
     }
+    const handleAdd = () => {
+            axios
+                .get('http://localhost:8080/players?a='+(amount-amountStep).toString()+'&b='+(amount).toString())
+                .then(res => res.data)
+                .then(json => middleware(json))
+                .catch(err => console.log(err))
+        setAmount(amount+amountStep)
+    }
+    useEffect(()=>handleAdd(),[])
 
     const list = [{name: "Player", isSortable: false}, {name: "Matches played", isSortable: true}, {name: "WR", isSortable: true}, {name: "isOnline", isSortable: true}]
     const header = <div className="relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white rounded-none bg-clip-border">
@@ -116,19 +129,14 @@ const Players = () => {
                 type="button">
                 Previous
             </button>
-            <button
+            <button onClick={handleAdd}
                 className="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 type="button">
                 Next
             </button>
         </div>
     </div>
-    useEffect(()=>{
-        fetch('http://localhost:8080/players')
-            .then(res => res.json())
-            .then(json => func(json))
-            .catch(err => console.log(err))
-    }, [])
+
     return <div className="p-10"><SortedTable header={header} footer={footer} list={list} tbody={filteredList} /></div>
 }
 
