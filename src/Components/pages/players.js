@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import SortedTable from "../sortedTable/sortedTable";
 import axios from "axios";
+import {AuthApi} from "../../AuthApi";
 
 const edit = <div className="p-4 border-b border-blue-gray-50">
     <button
@@ -65,7 +66,7 @@ const filter = (searchText, playersList) => {
 }
 const amountStep = 10;
 const Players = () => {
-
+    const throwErr = useContext(AuthApi).throwErr
     const [amount, setAmount] = useState(amountStep);
     const [playersList, setPlayersList] = useState([])
     const [filteredList, setFilteredList] = useState([])
@@ -90,7 +91,7 @@ const Players = () => {
                 .get('http://localhost:8080/players?a='+(amount-amountStep).toString()+'&b='+(amount).toString())
                 .then(res => res.data)
                 .then(json => middleware(json))
-                .catch(err => console.log(err))
+                .catch(err => throwErr(err))
         setAmount(amount+amountStep)
     }
     useEffect(()=>handleAdd(),[])

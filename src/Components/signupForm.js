@@ -1,22 +1,38 @@
-import { useState } from "react";
+import {useContext, useState} from "react";
 
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+import {AuthApi} from "../AuthApi";
 
 export function SignupForm() {
+    const throwErr = useContext(AuthApi).throwErr
     const [passwordShown, setPasswordShown] = useState(false);
+    const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const togglePasswordVisibility = () => setPasswordShown((cur) => !cur);
     const signUpHandler = () => {
         axios
-            .post("http://localhost:8080/users", {"email": email, "password": password})
+            .post("http://localhost:8080/users", {"nickname": nickname,"email": email, "password": password, "playerId": 1342534345624})
             .then((response) => {
                 console.log(response.data);
+                if(response.status === 200){
+                    axios
+                        .post("http://localhost:8080/sessions", {"email": email, "password": password})
+                        .then(res => {
+                            if(res.status === 200)
+                            window.location.href ="/"
+                        })
+                        .catch((error) => {
+                            console.warn(error);
+                            throwErr(error);
+                        });
+                }
             })
             .catch((error) => {
                 console.warn(error);
+                throwErr(error);
             });
     }
     return (
@@ -39,6 +55,7 @@ export function SignupForm() {
                             </Typography>
                         </label>
                         <Input
+                            onChange={e => setNickname(e.target.value)}
                             id="nickname"
                             color="gray"
                             size="lg"

@@ -10,7 +10,7 @@ export function LoginForm() {
     const [passwordShown, setPasswordShown] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const {auth, setAuth, name, setName} = useContext(AuthApi)
+    const throwErr = useContext(AuthApi).throwErr
     const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
     const loginHandler = () => {
         axios
@@ -20,12 +20,10 @@ export function LoginForm() {
                     //localStorage.setItem("username", "unknownUN")
                     window.location.href = "/"
                 }
-                else{
-
-                }
             })
             .catch((error) => {
                 console.warn(error);
+                throwErr(error);
             });
     }
     return (

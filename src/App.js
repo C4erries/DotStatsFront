@@ -2,22 +2,30 @@ import React, {useEffect, useState} from "react";
 import './App.css';
 import {NavbarDefault} from "./Components/navbar";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import axios from "axios";
 import Home from "./Components/pages/home";
 import Stats from "./Components/pages/stats";
 import Player from "./Components/pages/player";
 import Players from "./Components/pages/players";
 import Cybersport from "./Components/pages/cybersport";
-import LoginForm from "./Components/logInForm";
-import Matches from "./Components/pages/matches";
-import SignupForm from "./Components/signupForm";
 import Heroes from "./Components/pages/heroes";
-import {AuthApi} from "./AuthApi";
+import Matches from "./Components/pages/matches";
 import Whoami from "./Components/pages/whoami";
-import axios from "axios";
+import LoginForm from "./Components/logInForm";
+import SignupForm from "./Components/signupForm";
+import Error from "./Components/addons/error";
+import {AuthApi} from "./AuthApi";
+import Errors from "./Components/addons/errors";
+import errors from "./Components/addons/errors";
 
 
 
 function App() {
+    const throwErr = (error) =>{
+        setErrors(errors.concat([error]))
+    }
+    const [errors, setErrors] = useState([])
+
     const [auth, setAuth] = useState();
     const [name, setName] = useState('none');
     useEffect(()=>{
@@ -29,8 +37,8 @@ function App() {
                 }
                 else console.warn(res.status)
             })
-            .catch(err => console.warn(err))
-    })
+            .catch(err => throwErr(err.message))
+    }, [])
     axios.defaults.withCredentials = true;
     const exitHandler = () => {
         //axios.post("deleteCookie")
@@ -38,10 +46,12 @@ function App() {
         window.location.href = "/"
     }
 
+
     return (
         <div className="App">
-            <AuthApi.Provider value={{auth, setAuth, name, setName}}>
+            <AuthApi.Provider value={{auth, setAuth, name, setName, throwErr}}>
                 <NavbarDefault exitHandler={exitHandler} />
+                <Errors errors={errors} setErrors={setErrors}/>
                 <Router> <Routes>
                     <Route path="/private/whoami" element={<Whoami/>}/>
                     <Route index path="/" element={<Home/>}/>
