@@ -1,22 +1,23 @@
-import { useState } from "react";
+import {useContext, useState} from "react";
 
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+import {AuthApi} from "../AuthApi";
 
 
 export function LoginForm() {
     const [passwordShown, setPasswordShown] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const {auth, setAuth, name, setName} = useContext(AuthApi)
     const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
     const loginHandler = () => {
         axios
             .post("http://localhost:8080/sessions", {"email": email, "password": password})
             .then((response) => {
                 if(response.status === 200){
-                    localStorage.setItem("isAuth", true)
-                    localStorage.setItem("username", "unknownUN")
+                    //localStorage.setItem("username", "unknownUN")
                     window.location.href = "/"
                 }
                 else{
