@@ -1,70 +1,152 @@
-# Getting Started with Create React App
+# DotStatsFront
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Краткое описание**: DotStatsFront — это фронтенд-часть аналитической платформы для Dota 2. Реализована на React и TypeScript, обеспечивает визуализацию статистики матчей и игроков, получаемой от бэкенда DotStatsTest.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Содержание
 
-### `npm start`
+* [Цели проекта](#цели-проекта)
+* [Ключевые функциональные блоки](#ключевые-функциональные-блоки)
+* [Архитектура и структура](#архитектура-и-структура)
+* [Установка и запуск](#установка-и-запуск)
+* [Конфигурация](#конфигурация)
+* [Основные страницы и маршруты](#основные-страницы-и-маршруты)
+* [Компоненты и UI](#компоненты-и-ui)
+* [Стилизация](#стилизация)
+* [Тестирование](#тестирование)
+* [Сборка и деплой](#сборка-и-деплой)
+* [Планы по развитию](#планы-по-развитию)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Цели проекта
 
-### `npm test`
+* Предоставить удобный интерфейс для просмотра статистики матчей и игроков Dota 2.
+* Обеспечить быстрое и отзывчивое UX с помощью React и современного стека.
+* Интегрироваться с бэкенд-API DotStatsTest для получения и отображения данных.
+* Поддерживать доступность и адаптивность для различных устройств.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Ключевые функциональные блоки
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* **Список матчей**: таблица или карточки с основными данными о матчах (ID, карта, длительность).
+* **Просмотр деталей матча**: статистика героев, предметов, командные показатели.
+* **Страница игрока**: информация об аккаунте, рейтинг, последние матчи.
+* **Поиск по ID**: быстрая навигация к конкретному матчу или игроку.
+* **Графики и визуализации**: диаграммы производительности, топ-герои.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Архитектура и структура
 
-### `npm run eject`
+```
+DotStatsFront/
+├── public/                # Статические файлы (index.html, favicon)
+├── src/
+│   ├── api/               # Обёртки для HTTP-запросов к бэкенду
+│   ├── components/        # Переиспользуемые UI-компоненты
+│   ├── pages/             # Страницы приложения (Matches, MatchDetails, Player)
+│   ├── routes.tsx         # Определение маршрутов React Router
+│   ├── store/             # Состояние приложения (Redux или Context)
+│   ├── styles/            # Глобальные стили и темы
+│   └── index.tsx          # Точка входа React
+├── .env.example           # Пример переменных окружения (API_URL, FEATURE_FLAGS)
+├── package.json           # Скрипты и зависимости проекта
+├── tsconfig.json          # Настройки TypeScript
+├── webpack.config.js      # Конфигурация сборки (или Vite config)
+└── README.md
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Установка и запуск
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. **Клонировать репозиторий**:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```bash
+   git clone https://github.com/C4erries/DotStatsFront.git
+   cd DotStatsFront
+   ```
+2. **Установить зависимости**:
 
-## Learn More
+   ```bash
+   npm install
+   ```
+3. **Запустить в режиме разработки**:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```bash
+   npm run dev
+   ```
+4. **Открыть приложение**: перейти по адресу `http://localhost:3000`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## Конфигурация
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Файл `.env` (копировать из `.env.example`):
 
-### Analyzing the Bundle Size
+```dotenv
+REACT_APP_API_URL=http://localhost:8080/api
+REACT_APP_FEATURE_FLAGS=...
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Основные страницы и маршруты
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+* `/matches` — список матчей.
+* `/matches/:matchId` — детали выбранного матча.
+* `/players/:accountId` — профиль игрока.
+* `/search` — страница поиска матчей и игроков по ID.
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Компоненты и UI
 
-### Deployment
+* **MatchCard** — карточка одного матча.
+* **PlayerStats** — панель со статистикой игрока.
+* **NavBar** — навигационное меню.
+* **Charts** — обёртка для визуализаций (Recharts или Chart.js).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## Стилизация
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* Используется CSS Modules или Styled Components для локальной scoped-стилизации.
+* Глобальные переменные тем оформлены через CSS Custom Properties (variables).
+* Адаптивный дизайн через Flexbox и CSS Grid.
+
+---
+
+## Тестирование
+
+* Юнит-тесты компонентов: Jest + React Testing Library.
+* Интеграционные тесты маршрутов.
+
+Команды:
+
+```bash
+npm run test
+npm run test:coverage
+```
+
+---
+
+## Сборка и деплой
+
+* **Сборка**:
+
+  ```bash
+  npm run build
+  ```
+* **Деплой**: собранная папка `build/` загружается на любой статический хостинг (Netlify, Vercel).
+
+---
+
+## Планы по развитию
+
+* Добавить систему аутентификации и авторизации.
+* Расширить графики аналитики: heatmap, winrate по герою.
+---
